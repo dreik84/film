@@ -1,0 +1,12 @@
+package com.example.film.model;
+
+import lombok.Data;
+
+@Data
+public class User {
+    private long id;
+    private String email;
+    private String login;
+    private String name;
+    private String birthday;
+}
