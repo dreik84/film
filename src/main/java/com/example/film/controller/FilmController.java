@@ -2,6 +2,8 @@ package com.example.film.controller;
 
 import com.example.film.exception.ValidationException;
 import com.example.film.model.Film;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.util.Map;
 @RestController
 public class FilmController {
     private final Map<Long, Film> films = new HashMap<>();
+    private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @PostMapping("/films")
     public Film addFilm(@RequestBody Film film) {
@@ -24,17 +27,28 @@ public class FilmController {
             throw new ValidationException("Продолжительность фильма должна быть положительной");
 
         films.put(film.getId(), film);
+        log.info("Добавлен новый фильм с id {}", film.getId());
         return film;
     }
 
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film) {
         films.put(film.getId(), film);
+        log.info("Обновлен фильм с id {}", film.getId());
         return film;
     }
 
     @GetMapping("/films")
     public Map<Long, Film> getFilms() {
         return films;
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public Map<String, String> handle(final ValidationException e) {
+        log.error(e.getMessage());
+
+        return Map.of(
+                e.getClass().toGenericString(), e.getMessage()
+        );
     }
 }

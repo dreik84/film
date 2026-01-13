@@ -2,6 +2,7 @@ package com.example.film.controller;
 
 import com.example.film.exception.ValidationException;
 import com.example.film.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Slf4j
 public class UserController {
     private final Map<Long, User> users = new HashMap<>();
 
@@ -24,12 +26,14 @@ public class UserController {
             throw new ValidationException("Дата рождения не может быть в будующем");
 
         users.put(user.getId(), user);
+        log.info("Добавлен новый пользователь с id {}", user.getId());
         return user;
     }
 
     @PutMapping("/users")
     public User updateFilm(@RequestBody User user) {
         users.put(user.getId(), user);
+        log.info("Обновлен пользователь с id {}", user.getId());
         return user;
     }
 
@@ -40,6 +44,8 @@ public class UserController {
 
     @ExceptionHandler(ValidationException.class)
     public Map<String, String> handle(final ValidationException e) {
+        log.error(e.getMessage());
+
         return Map.of(
                 e.getClass().toGenericString(), e.getMessage()
         );
