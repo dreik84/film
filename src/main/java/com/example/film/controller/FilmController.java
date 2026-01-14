@@ -2,8 +2,10 @@ package com.example.film.controller;
 
 import com.example.film.exception.ValidationException;
 import com.example.film.model.Film;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -16,7 +18,7 @@ public class FilmController {
     private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @PostMapping("/films")
-    public Film addFilm(@RequestBody Film film) {
+    public Film addFilm(@Valid @RequestBody Film film) {
         if (film.getName().isBlank())
             throw new ValidationException("Название фильма не может быть пустым");
         if (film.getDescription().length() > 200)
@@ -32,7 +34,7 @@ public class FilmController {
     }
 
     @PutMapping("/films")
-    public Film updateFilm(@RequestBody Film film) {
+    public Film updateFilm(@Valid @RequestBody Film film) {
         films.put(film.getId(), film);
         log.info("Обновлен фильм с id {}", film.getId());
         return film;
@@ -44,6 +46,7 @@ public class FilmController {
     }
 
     @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handle(final ValidationException e) {
         log.error(e.getMessage());
 
