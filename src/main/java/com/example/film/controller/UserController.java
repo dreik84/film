@@ -2,19 +2,22 @@ package com.example.film.controller;
 
 import com.example.film.exception.ValidationException;
 import com.example.film.model.User;
+import com.example.film.storage.InMemoryUserStorage;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @Slf4j
 public class UserController {
-    private final Map<Long, User> users = new HashMap<>();
+
+    @Autowired
+    private InMemoryUserStorage storage;
 
     @PostMapping("/users")
     public User addFilm(@Valid @RequestBody User user) {
@@ -27,21 +30,21 @@ public class UserController {
         if (user.getBirthday().isAfter(LocalDate.now()))
             throw new ValidationException("Дата рождения не может быть в будующем");
 
-        users.put(user.getId(), user);
+        storage.addUser(user);
         log.info("Добавлен новый пользователь с id {}", user.getId());
         return user;
     }
 
     @PutMapping("/users")
     public User updateFilm(@Valid @RequestBody User user) {
-        users.put(user.getId(), user);
+        storage.addUser(user);
         log.info("Обновлен пользователь с id {}", user.getId());
         return user;
     }
 
     @GetMapping("/users")
     public Map<Long, User> getFilms() {
-        return users;
+        return storage.getUsers();
     }
 
     @ExceptionHandler(ValidationException.class)

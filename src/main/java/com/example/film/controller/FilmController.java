@@ -2,19 +2,22 @@ package com.example.film.controller;
 
 import com.example.film.exception.ValidationException;
 import com.example.film.model.Film;
+import com.example.film.storage.InMemoryFilmStorage;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class FilmController {
-    private final Map<Long, Film> films = new HashMap<>();
+
+    @Autowired
+    private InMemoryFilmStorage storage;
     private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @PostMapping("/films")
@@ -28,21 +31,21 @@ public class FilmController {
         if (film.getDuration().toMillis() <= 0)
             throw new ValidationException("Продолжительность фильма должна быть положительной");
 
-        films.put(film.getId(), film);
+        storage.addFilm(film);
         log.info("Добавлен новый фильм с id {}", film.getId());
         return film;
     }
 
     @PutMapping("/films")
     public Film updateFilm(@Valid @RequestBody Film film) {
-        films.put(film.getId(), film);
+        storage.addFilm(film);
         log.info("Обновлен фильм с id {}", film.getId());
         return film;
     }
 
     @GetMapping("/films")
     public Map<Long, Film> getFilms() {
-        return films;
+        return storage.getFilms();
     }
 
     @ExceptionHandler(ValidationException.class)
