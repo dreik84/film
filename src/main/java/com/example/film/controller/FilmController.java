@@ -2,7 +2,8 @@ package com.example.film.controller;
 
 import com.example.film.exception.ValidationException;
 import com.example.film.model.Film;
-import com.example.film.storage.InMemoryFilmStorage;
+import com.example.film.service.FilmService;
+import com.example.film.storage.FilmStorage;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,15 @@ import java.util.Map;
 
 @RestController
 public class FilmController {
+    private final FilmStorage storage;
+    private final FilmService service;
+    private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @Autowired
-    private InMemoryFilmStorage storage;
-    private final static Logger log = LoggerFactory.getLogger(FilmController.class);
+    public FilmController(FilmStorage storage, FilmService service) {
+        this.storage = storage;
+        this.service = service;
+    }
 
     @PostMapping("/films")
     public Film addFilm(@Valid @RequestBody Film film) {

@@ -2,7 +2,8 @@ package com.example.film.controller;
 
 import com.example.film.exception.ValidationException;
 import com.example.film.model.User;
-import com.example.film.storage.InMemoryUserStorage;
+import com.example.film.service.UserService;
+import com.example.film.storage.UserStorage;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,14 @@ import java.util.Map;
 @RestController
 @Slf4j
 public class UserController {
+    private final UserStorage storage;
+    private final UserService service;
 
     @Autowired
-    private InMemoryUserStorage storage;
+    public UserController(UserStorage storage, UserService service) {
+        this.storage = storage;
+        this.service = service;
+    }
 
     @PostMapping("/users")
     public User addFilm(@Valid @RequestBody User user) {
