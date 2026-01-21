@@ -1,6 +1,8 @@
 package com.example.film.service;
 
 import com.example.film.model.Film;
+import com.example.film.storage.FilmStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -9,8 +11,11 @@ import java.util.Set;
 @Service
 public class FilmService {
     private final Set<Long> films;
+    private final FilmStorage storage;
 
-    public FilmService() {
+    @Autowired
+    public FilmService(FilmStorage storage) {
+        this.storage = storage;
         films = new HashSet<>();
     }
 
