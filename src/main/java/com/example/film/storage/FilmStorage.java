@@ -10,4 +10,6 @@ public interface FilmStorage {
     Film updateFilm(Film film);
 
     Map<Long, Film> getFilms();
+
+    Film getFilmById(Long id);
 }

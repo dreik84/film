@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public User addFilm(@Valid @RequestBody User user) {
+    public User addUser(@Valid @RequestBody User user) {
         if (user.getEmail().isBlank() || !user.getEmail().contains("@"))
             throw new ValidationException("Электронная почта не должна быть пустой");
         if (user.getLogin().isBlank())
@@ -42,14 +42,14 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public User updateFilm(@Valid @RequestBody User user) {
+    public User updateUser(@Valid @RequestBody User user) {
         storage.addUser(user);
         log.info("Обновлен пользователь с id {}", user.getId());
         return user;
     }
 
     @GetMapping("/users")
-    public Map<Long, User> getFilms() {
+    public Map<Long, User> getUsers() {
         return storage.getUsers();
     }
 
@@ -61,5 +61,10 @@ public class UserController {
         return Map.of(
                 e.getClass().toGenericString(), e.getMessage()
         );
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return storage.getUserById(id);
     }
 }

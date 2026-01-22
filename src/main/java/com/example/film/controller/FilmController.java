@@ -63,4 +63,9 @@ public class FilmController {
                 e.getClass().toGenericString(), e.getMessage()
         );
     }
+
+    @GetMapping("/films/{id}")
+    public Film getFilmById(@PathVariable Long id) {
+        return storage.getFilmById(id);
+    }
 }

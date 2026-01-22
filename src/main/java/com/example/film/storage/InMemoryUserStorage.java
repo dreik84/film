@@ -26,4 +26,9 @@ public class InMemoryUserStorage implements UserStorage {
     public Map<Long, User> getUsers() {
         return users;
     }
+
+    @Override
+    public User getUserById(Long id) {
+        return users.get(id);
+    }
 }
