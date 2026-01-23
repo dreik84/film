@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -48,6 +49,20 @@ public class UserController {
         return user;
     }
 
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public User addToFriends(@PathVariable Long id, @PathVariable Long friendId) {
+        User friend = storage.getUserById(friendId);
+        service.addToFriends(friend);
+        return friend;
+    }
+
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public User deleteFromFriends(@PathVariable Long id, @PathVariable Long friendId) {
+        User friend = storage.getUserById(friendId);
+        service.deleteFromFriends(friend);
+        return friend;
+    }
+
     @GetMapping("/users")
     public Map<Long, User> getUsers() {
         return storage.getUsers();
@@ -66,5 +81,11 @@ public class UserController {
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable Long id) {
         return storage.getUserById(id);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public Set<Long> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        User other = storage.getUserById(otherId);
+        return service.getCommonFriends(other);
     }
 }
