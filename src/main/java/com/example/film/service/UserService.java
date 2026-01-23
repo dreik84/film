@@ -29,6 +29,10 @@ public class UserService {
         return user;
     }
 
+    public Set<Long> getCommonFriends(User user) {
+        return friends;
+    }
+
     public Set<Long> getFriends() {
         return friends;
     }
