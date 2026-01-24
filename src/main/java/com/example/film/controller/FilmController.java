@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 public class FilmController {
@@ -49,6 +50,20 @@ public class FilmController {
         return film;
     }
 
+    @PutMapping("/films/{id}/like/{userId}")
+    public Film addLike(@PathVariable Long id, @PathVariable Long userId) {
+        Film film = storage.getFilmById(id);
+        service.addLike(film);
+        return film;
+    }
+
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        Film film = storage.getFilmById(id);
+        service.removeLike(film);
+        return film;
+    }
+
     @GetMapping("/films")
     public Map<Long, Film> getFilms() {
         return storage.getFilms();
@@ -67,5 +82,11 @@ public class FilmController {
     @GetMapping("/films/{id}")
     public Film getFilmById(@PathVariable Long id) {
         return storage.getFilmById(id);
+    }
+
+    @GetMapping("/films/popular?count={count}")
+    public Set<Long> getPopularFilms(@RequestParam Long count) {
+        if (count == null) count = 10L;
+        return service.getTopTen();
     }
 }
