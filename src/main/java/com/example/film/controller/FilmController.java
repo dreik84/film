@@ -69,6 +69,20 @@ public class FilmController {
         return storage.getFilms();
     }
 
+    @GetMapping("/films/{id}")
+    public Film getFilmById(@PathVariable Long id) {
+        if (id == null) {
+            throw new ValidationException("Параметр id равен null.");
+        }
+        return storage.getFilmById(id);
+    }
+
+    @GetMapping("/films/popular?count={count}")
+    public Set<Long> getPopularFilms(@RequestParam Long count) {
+        if (count == null) count = 10L;
+        return service.getTopTen();
+    }
+
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handle(final ValidationException e) {
@@ -77,16 +91,5 @@ public class FilmController {
         return Map.of(
                 e.getClass().toGenericString(), e.getMessage()
         );
-    }
-
-    @GetMapping("/films/{id}")
-    public Film getFilmById(@PathVariable Long id) {
-        return storage.getFilmById(id);
-    }
-
-    @GetMapping("/films/popular?count={count}")
-    public Set<Long> getPopularFilms(@RequestParam Long count) {
-        if (count == null) count = 10L;
-        return service.getTopTen();
     }
 }

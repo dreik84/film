@@ -68,6 +68,20 @@ public class UserController {
         return storage.getUsers();
     }
 
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable Long id) {
+        if (id == null) {
+            throw new ValidationException("Параметр id равен null.");
+        }
+        return storage.getUserById(id);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public Set<Long> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        User other = storage.getUserById(otherId);
+        return service.getCommonFriends(other);
+    }
+
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handle(final ValidationException e) {
@@ -76,16 +90,5 @@ public class UserController {
         return Map.of(
                 e.getClass().toGenericString(), e.getMessage()
         );
-    }
-
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return storage.getUserById(id);
-    }
-
-    @GetMapping("/users/{id}/friends/common/{otherId}")
-    public Set<Long> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        User other = storage.getUserById(otherId);
-        return service.getCommonFriends(other);
     }
 }
