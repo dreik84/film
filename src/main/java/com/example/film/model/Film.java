@@ -13,6 +13,8 @@ public class Film {
     @NotBlank
     private String name;
     private String description;
+    private String genre;
+    private String rateMPA;
     private LocalDate releaseDate;
     private Duration duration;
 }
