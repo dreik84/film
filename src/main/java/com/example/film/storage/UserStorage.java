@@ -3,6 +3,7 @@ package com.example.film.storage;
 import com.example.film.model.User;
 
 import java.util.Map;
+import java.util.Optional;
 
 public interface UserStorage {
     User addUser(User user);
@@ -11,5 +12,7 @@ public interface UserStorage {
 
     Map<Long, User> getUsers();
 
-    User getUserById(Long id);
+    Optional<User> getUserById(Long id);
+
+    User deleteUser(Long id);
 }

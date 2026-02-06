@@ -52,14 +52,14 @@ public class FilmController {
 
     @PutMapping("/films/{id}/like/{userId}")
     public Film addLike(@PathVariable Long id, @PathVariable Long userId) {
-        Film film = storage.getFilmById(id);
+        Film film = storage.getFilmById(id).get();
         service.addLike(film);
         return film;
     }
 
     @DeleteMapping("/films/{id}/like/{userId}")
     public Film deleteLike(@PathVariable Long id, @PathVariable Long userId) {
-        Film film = storage.getFilmById(id);
+        Film film = storage.getFilmById(id).get();
         service.removeLike(film);
         return film;
     }
@@ -74,7 +74,7 @@ public class FilmController {
         if (id == null) {
             throw new ValidationException("Параметр id равен null.");
         }
-        return storage.getFilmById(id);
+        return storage.getFilmById(id).get();
     }
 
     @GetMapping("/films/popular?count={count}")

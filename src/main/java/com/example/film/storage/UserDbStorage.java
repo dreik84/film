@@ -4,6 +4,7 @@ import com.example.film.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Qualifier
 public class UserDbStorage implements UserStorage {
@@ -24,7 +25,12 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public Optional<User> getUserById(Long id) {
+        return null;
+    }
+
+    @Override
+    public User deleteUser(Long id) {
         return null;
     }
 }

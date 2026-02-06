@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -28,7 +29,12 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film getFilmById(Long id) {
-        return films.get(id);
+    public Optional<Film> getFilmById(Long id) {
+        return Optional.of(films.get(id));
+    }
+
+    @Override
+    public Film deleteFilm(Long id) {
+        return null;
     }
 }

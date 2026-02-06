@@ -51,14 +51,14 @@ public class UserController {
 
     @PutMapping("/users/{id}/friends/{friendId}")
     public User addToFriends(@PathVariable Long id, @PathVariable Long friendId) {
-        User friend = storage.getUserById(friendId);
+        User friend = storage.getUserById(friendId).get();
         service.addToFriends(friend);
         return friend;
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
     public User deleteFromFriends(@PathVariable Long id, @PathVariable Long friendId) {
-        User friend = storage.getUserById(friendId);
+        User friend = storage.getUserById(friendId).get();
         service.deleteFromFriends(friend);
         return friend;
     }
@@ -73,12 +73,12 @@ public class UserController {
         if (id == null) {
             throw new ValidationException("Параметр id равен null.");
         }
-        return storage.getUserById(id);
+        return storage.getUserById(id).get();
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
     public Set<Long> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        User other = storage.getUserById(otherId);
+        User other = storage.getUserById(otherId).get();
         return service.getCommonFriends(other);
     }
 

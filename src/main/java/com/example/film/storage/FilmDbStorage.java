@@ -4,6 +4,7 @@ import com.example.film.model.Film;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Qualifier
 public class FilmDbStorage implements FilmStorage {
@@ -24,7 +25,12 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Film getFilmById(Long id) {
+    public Optional<Film> getFilmById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Film deleteFilm(Long id) {
         return null;
     }
 }
