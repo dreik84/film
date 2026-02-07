@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class FilmController {
     private final static Logger log = LoggerFactory.getLogger(FilmController.class);
 
     @Autowired
-    public FilmController(FilmStorage storage, FilmService service) {
+    public FilmController(@Qualifier("") FilmStorage storage, FilmService service) {
         this.storage = storage;
         this.service = service;
     }

@@ -7,6 +7,7 @@ import com.example.film.storage.UserStorage;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService service;
 
     @Autowired
-    public UserController(UserStorage storage, UserService service) {
+    public UserController(@Qualifier("") UserStorage storage, UserService service) {
         this.storage = storage;
         this.service = service;
     }

@@ -3,6 +3,7 @@ package com.example.film.service;
 import com.example.film.model.User;
 import com.example.film.storage.UserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -14,7 +15,7 @@ public class UserService {
     private final UserStorage storage;
 
     @Autowired
-    public UserService(UserStorage storage) {
+    public UserService(@Qualifier("") UserStorage storage) {
         this.storage = storage;
         friends = new HashSet<>();
     }

@@ -2,12 +2,20 @@ package com.example.film.storage;
 
 import com.example.film.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;
 
 @Qualifier
+@Component
 public class UserDbStorage implements UserStorage {
+    private final JdbcTemplate jdbcTemplate;
+
+    public UserDbStorage(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public User addUser(User user) {
@@ -26,7 +34,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public Optional<User> getUserById(Long id) {
-        return null;
+        return Optional.empty();
     }
 
     @Override
