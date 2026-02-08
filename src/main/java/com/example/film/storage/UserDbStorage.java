@@ -3,6 +3,7 @@ package com.example.film.storage;
 import com.example.film.model.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -19,6 +20,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
+
+
         return null;
     }
 
@@ -34,7 +37,11 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public Optional<User> getUserById(Long id) {
-        return Optional.empty();
+        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * users WHERE id = ?;");
+        User user = new User();
+        user.setId(id);
+
+        return Optional.of(user);
     }
 
     @Override
