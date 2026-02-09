@@ -1,6 +1,8 @@
 package com.example.film.storage;
 
 import com.example.film.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -12,6 +14,8 @@ import java.util.Optional;
 @Qualifier
 @Component
 public class UserDbStorage implements UserStorage {
+    private final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
+
     private final JdbcTemplate jdbcTemplate;
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {
@@ -37,11 +41,21 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public Optional<User> getUserById(Long id) {
-        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * users WHERE id = ?;");
-        User user = new User();
-        user.setId(id);
+        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * users WHERE id = ?", id);
+        if (userRow.next()) {
+            log.info("Найден пользователь: {} {}", userRow.getLong("id"), userRow.getString("name"));
 
-        return Optional.of(user);
+            User user = new User();
+            user.setId(id);
+            user.setEmail(userRow.getString("email"));
+            user.setLogin(userRow.getString("login"));
+            user.setBirthday(userRow.getDate("birthday").toLocalDate());
+            user.setFriendState(userRow.getString("friend_state"));
+
+            return Optional.of(user);
+        }
+
+        return Optional.empty();
     }
 
     @Override
