@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,7 +36,22 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Map<Long, Film> getFilms() {
-        return Map.of();
+        SqlRowSet filmsRow = jdbcTemplate.queryForRowSet("SELECT * FROM FILMS");
+        Map<Long, Film> films = new HashMap<>();
+
+        while (filmsRow.next()) {
+            Film film = new Film();
+            film.setId(filmsRow.getLong("id"));
+            film.setDescription(filmsRow.getString("description"));
+            film.setGenre(filmsRow.getString("genre"));
+            film.setRateMPA(filmsRow.getString("rate_mpa"));
+            film.setReleaseDate(filmsRow.getDate("release_date").toLocalDate());
+            film.setDuration(Duration.ofDays(filmsRow.getInt("duration")));
+
+            films.put(film.getId(), film);
+        }
+
+        return films;
     }
 
     @Override
