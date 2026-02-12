@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,12 +37,24 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public Map<Long, User> getUsers() {
-        return Map.of();
+        SqlRowSet usersRow = jdbcTemplate.queryForRowSet("SELECT * FROM users");
+        Map<Long, User> users = new HashMap<>();
+
+        while (usersRow.next()) {
+            User user = new User();
+            user.setId(usersRow.getLong("id"));
+            user.setEmail(usersRow.getString("email"));
+            user.setLogin(usersRow.getString("login"));
+            user.setBirthday(usersRow.getDate("birthday").toLocalDate());
+            user.setFriendState(usersRow.getString("friend_state"));
+        }
+
+        return users;
     }
 
     @Override
     public Optional<User> getUserById(Long id) {
-        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * users WHERE id = ?", id);
+        SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * FROM users WHERE id = ?", id);
         if (userRow.next()) {
             log.info("Найден пользователь: {} {}", userRow.getLong("id"), userRow.getString("name"));
 
