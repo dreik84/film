@@ -55,6 +55,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public Optional<User> getUserById(Long id) {
         SqlRowSet userRow = jdbcTemplate.queryForRowSet("SELECT * FROM users WHERE id = ?", id);
+
         if (userRow.next()) {
             log.info("Найден пользователь: {} {}", userRow.getLong("id"), userRow.getString("name"));
 
